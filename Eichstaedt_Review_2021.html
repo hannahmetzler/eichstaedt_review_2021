@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Closed- and open-vocabulary approaches to text analysis</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="libs/footer&middle.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Closed- and open-vocabulary approaches to text analysis
+## Eichstaedt et al. 2021
+
+---
+
+
+
+
+
+
+layout: true
+
+---
+
+## Overview
+
+* [Paper link](https://static1.squarespace.com/static/53d29678e4b04e06965e9423/t/6189970b8180b9631ccdee10/1636407067876/2021psychMethods.pdf) &lt;br&gt;&lt;br&gt;
+* Closed-vocabulary (word lists) and open-vocabulary approaches (data-driven)
+  * choice should depend on research questions and predictive power &lt;br&gt;&lt;br&gt;
+* Comparison on same dataset: MyPersonality dataset
+    * Facebook status updates &amp; self-reported survey data from 65,896 users
+    * Prediction of gender/age, personality, tracing psychological processes &lt;br&gt;&lt;br&gt;
+* Open source language analysis tools
+* Typical errors in closed vocabulary methods
+* Impact of sample size, number of words per user, number of topics
+* Recommendations for best practices
+
+---
+
+# Closed vocabulary approaches
+
+* From social sciences
+* Word lists (=dictionaries) based on theory/expert judgement
+* Word counts and relative frequencies
+
+&lt;img src="figures/Fig1_example_tweets_emotion_coding.png" width="1000" /&gt;
+
+---
+
+# Closed vocabulary approaches
+
+* Words are believed to theoretically represent the construct
+    * Like items in questionnaires
+    * Agency dictionary:  “authoritative,” “masterful,” “choice,” and “decide,” (Pietraszkiewicz et al.’s 2019)
+    
+* Generous number of synonyms and forms of words to capture differences in language use
+
+* Many words occur rarely
+  
+    
+---
+
+# Statistical Fundamentals of Language Use
+
+Relative frequency of 1000 most common words vs. their frequency rank
+&lt;img src="figures/fig1_word_frequency.png" width="1000" /&gt;
+
+???
+* Frequency in sentences vs. rank: not a linear relationship, but a Zipfian law
+* Function words very frequent  (articles, pronouns, prepositions, and conjunctions)
+* Many more content words, used less frequently
+* b: 96 words account for 50%
+
+---
+
+# Function vs. content words
+
+* Content words: Highly skewed, log-normal
+
+* Function words: normal distribution
+
+    * very frequent even in small samples 
+    
+    * better suited for standard statistical methods
+    
+    * more reliable markers of psychological processes
+    * used without conscious attention (we don't keep track)
+    
+    * particularly useful in psych studies
+
+
+---
+
+## Common closed vocabulary programs
+
+#### 1) The General Inquirer (GI): 182 dictionaries in total, 1960-2000
+
+  * 8 Lasswell dictionaries: 
+      * deference: power, rectitude, respect, affection, 
+      * welfare wealth, well-being, enlightenment, skill
+  
+  * 107 Harvard psycho-sociological dictionaries (*Harvard IV*):  
+      * e.g. virtues, feelings, overstatement, rituals, social, cognitive, motivation
+  
+  * Stanford political dictionaries for decision making in political interactions (*Osgood*)
+
+---
+  
+## Common  closed vocabulary programs
+
+#### 2) DICTION:  “verbal tone” in 500 U.S. presidential speeches 
+
+* meaning of words specific to political and business contexts
+
+#### 3) LIWC: Linguistic Inquiry and Word Count, 1993, 2001, **2007, 2015**
+
+* Developed to analyze essays written during expressive writing intervention
+* Hierarchical organisation (e.g. negative emotions)
+* Function vs. content words (e.g. I and low status/depression)
+
+#### 4) Dictionaries for narrow application in clinical context (see paper)
+
+
+???
+Clinical:  
+  * Regressive Imagery Dictionary/Count 
+  * TAS/C 
+  * PCAD: /Psychiatric Content Analysis and Diagnosis 
+
+---
+
+## Open vocabulary approaches: Clustering
+
+* From computer science: clusters of semantically related words
+* Reduce the number of dimensions, better for prediction
+
+#### 1) Latent Semantic Analysis (LSA): similarity between texts
+
+* Dimensionality reduction (like factor analysis): 
+    * Words in space of ~300 latent dimensions
+* Semantic word similarity: cosine similarity of vectors = overlap of use contexts &lt;br&gt; &lt;br&gt;
+* Dimensions hard to interpret
+* Reason: ignores multiple word senses: “buckle”, “belt”, and “asteroid” 
+* Math constraints don't represent language structure
+
+
+---
+
+## Common open vocabulary approaches
+
+#### 2) Latent Dirichlet Allocation: Topic modelling
+
+.pull-left[
+* Co-occurrence of words
+* Weights per word &lt;/br&gt; =  contribution to topic
+* More semantically coherent  
+* Word senses separated per context: 
+  * belt, asteroid, Jupiter
+  * belt, buckle, pants
+* Topic modelling vs. extraction
+  * Modelling better with large set
+]
+
+.pull-right[
+
+&lt;img src="figures/fig2_topic_modeling.png" width="1000" /&gt;
+]
+
+---
+
+## Common open vocabulary approaches
+
+#### 3) Word embeddings: vector representations
+
+* Words that occur in similar contexts tend to have similar meanings
+* Contexts (embeddings) describe words in low-dimensional vector space (300)
+
+.pull-left[.center-left[
+&lt;img src="figures/wordembeddings.svg" width="400" /&gt;
+]]
+
+.pull-right[
+Examples
+* Word2Vec
+* GloVe
+]
+---
+
+#### 3) Word embeddings: vector representations
+
+* Optimize vector to correctly predict which words are in the context 
+    * typical: 3-6 words on each side as embeddings
+    
+* Ground truth: actually occurring words
+* Can be learned/pretrained on massive datasets
+  * Fixed vectors applied (*extracted*) in smaller datasets
+
+* Captures human intuitions about which words are associated
+
+* Input to supervised models (SVM, random forests,...) or deep learning
+
+---
+
+#### 4) Contextual word embeddings
+
+* *Fixed* vectors: same list of numbers in every context when applied (*extracted*)
+
+* *Contextual*: different vectors assigned based on the context
+    * not only during pretraining, but also during extraction
+    * “they played soccer” and “they went to the play.” 
+    * computationally more intensive
+    
+* Have improved performance in nearly every task
+  * ELMO (recurrent neural network)
+  * BERT, XLNet, RoBERTa (transformer)
+
+---
+## Common open vocabulary approaches 
+
+#### 5) Differential Language Analysis
+
+* Correlation of word frequencies with traits
+
+* Words that best represent a construct
+
+  * e.g. personality traits, age, gender
+  
+* Pos/neg: words that differentiate an outcome
+
+* Emoticons, punctuation, multiword expressions
+
+* Exploratory method: many correlations with correction
+
+---
+
+# Comparison
+
+.pull-left[.center-left[
+**Open-vocabulary approaches**
+* Easy to calculate many variables
+
+* Comparable across studies
+* rigid, insensitive to context &amp;
+* changes in meanings over time
+
+* spurious correlations
+]]
+
+.pull-right[.center-right[
+**Closed-vocabulary approaches: LDA**
+* more technical expertise
+
+* more computation &amp; large datasets
+* differentiate word senses
+
+* semantically coherent
+]]
+
+---
+
+## Existing validation studies
+
+* Self report data as ground truth
+
+* LIWC 2001/2007: cognitive mechanisms, attention, low social status &lt;br&gt; Tausczik and Pennebaker (2010) 
+* LIWC2001: demographics, big 5, mental/physical health &lt;br&gt; (Pennebaker 2003)
+* GI, DICTION, TAS/C (Mehl 2006) &lt;br&gt;&lt;br&gt;
+* Closed + open: lower-order personality facets (Yarkoni 2010)
+* ML personality with facebook dataset: Schwartz et al. 2013
+* Meta-analysis on big five studies (Azucar et al. 2018)
+
+
+---
+
+# Conclusion
+
+* Social media data as opportunity
+
+* We need to know what these measures actually capture
+
+
+---
+
+## Methods
+
+* Relative word frequencies per user
+* Emoticons, punctuation &amp; most probably 2/3-grams included
+
+* Dictionary extraction: Python code &amp; MySQL infrastructure [(DLATK, Schwartz et al., 2017)]( http://dlatk.wwbp.org)
+* LIWC 2015, DICTION, GI (Supplementary: LIWC 2007)
+
+* Topic extraction per user: 2000 facebook topics from Schwartz et al. 2013
+
+* Penalized regression: predict dictionaries &amp; topics from gender, age, personality
+
+* continue on p11 in paper
+
+---
+
+## Table 1: correlations between dictionaries
+
+* overlap in words
+* highest for function words, because these are most frequent
+
+---
+
+# Word clouds 
+
+* Dictionaries:
+  * Word clouds larger words indicate stronger correlations with the outcome 
+  * Color: frequency
+
+* Topics: 10 words with the largest prevalence in the topic
+  * prevalence: size and color of word (dark/large = prevalent)
+
+---
+
+
+# Conclusions
+
+* Recommendations for best practices: complementary use of both
+    * how people think &amp; feel: closed approaches
+    * what people think &amp; feel: open approaches
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/perc.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
