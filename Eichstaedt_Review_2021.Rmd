@@ -258,7 +258,7 @@ Examples
 # Comparison
 
 .pull-left[.center-left[
-**Open-vocabulary approaches**
+**Closed vocabulary approaches**
 * Easy to calculate many variables
 
 * Comparable across studies
@@ -269,7 +269,7 @@ Examples
 ]]
 
 .pull-right[.center-right[
-**Closed-vocabulary approaches: LDA**
+**Open vocabulary approaches: LDA**
 * more technical expertise
 
 * more computation & large datasets
