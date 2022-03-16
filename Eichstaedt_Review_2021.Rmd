@@ -113,9 +113,10 @@ knitr::include_graphics('figures/fig1_word_frequency.png')
 
 #### 1) The General Inquirer (GI): 182 dictionaries in total, 1960-2000
 
-  * 8 Lasswell dictionaries: 
+  * 8 Lasswell categories: 
       * deference: power, rectitude, respect, affection, 
-      * welfare wealth, well-being, enlightenment, skill
+      * welfare: wealth, well-being, enlightenment, skill
+  * Each split into participants, transactions (social distribution) & other dictionaries
   
   * 107 Harvard psycho-sociological dictionaries (*Harvard IV*):  
       * e.g. virtues, feelings, overstatement, rituals, social, cognitive, motivation
@@ -300,47 +301,245 @@ Examples
 
 * We need to know what these measures actually capture
 
+---
+
+# Recap part 1
+
+.pull-left[.center-left[
+### Dictionaries: 
+* LIWC 2015
+* DICTION: presidential speeches 
+* General inquirer (GI) - 182 dictionaries <br><br>
+* _Easy, comparable_
+* _Problem: ambiguous words_
+]]
+
+.pull-right[.center-right[
+### Open-vocabulary approaches: 
+* LDA - topic modelling
+* (Fixed/Contextual word embeddings) <br><br>
+* _More technical & <br> computationally intensive_
+* _Can differentiate word senses_
+]]
 
 ---
 
 ## Methods
 
-* Relative word frequencies per user
-* Emoticons, punctuation & most probably 2/3-grams included
-
-* Dictionary extraction: Python code & MySQL infrastructure [(DLATK, Schwartz et al., 2017)]( http://dlatk.wwbp.org)
+* Relative token frequencies per user
+* Included: Emoticons, punctuation & probable 2/3-grams ("happy birthday") <br><br>
 * LIWC 2015, DICTION, GI (Supplementary: LIWC 2007)
+* Topic extraction per user: 2000 facebook topics from Schwartz et al. 2013 <br><br>
+* Comparison on **My Personality data set**
+    * Facebook status updates & self-reported survey data from 65,896 users <br><br>
+* Correlations & prediction: dictionaries & topics  - gender, age & personality
+* (continue on p 12 = 409)
 
-* Topic extraction per user: 2000 facebook topics from Schwartz et al. 2013
-
-* Penalized regression: predict dictionaries & topics from gender, age, personality
-
-* continue on p11 in paper
-
----
-
-## Table 1: correlations between dictionaries
-
-* overlap in words
-* highest for function words, because these are most frequent
 
 ---
 
-# Word clouds 
 
-* Dictionaries:
-  * Word clouds larger words indicate stronger correlations with the outcome 
-  * Color: frequency
+## Table 1: correlations
 
-* Topics: 10 words with the largest prevalence in the topic
-  * prevalence: size and color of word (dark/large = prevalent)
+* Positive affect
+* Negative affect
+* Self-reference/personal pronouns <br> <br> 
+* generally positive correlations between & within dictionaries
+  * overlap in words
+  
+* highest for function words (most frequent): self-reference
+  
 
 ---
 
+# Notes on Figure 4A - Gender
+
+**10 largest pos/neg regression coefficients between dictionaries & outcomes**
+
+* Women: female, positive emo, close relationship dictionaries
+* Men: negative emotions (only anger), affiliative vs. hostile/strength, articles, prepositions
+
+#### Word clouds 
+
+* Women: high arousal emotions (excite, amazing, wonderful), love, shopping
+* Men: economic concerns, politics, sports, swear words
+
+---
+
+# Notes on Figure 4B - Age
+
+* Older: Articles, Prepositions, function words
+  * Talking about others, their social group
+* Younger: negative emotion, self-reference
+
+#### Word clouds: 
+
+* Older: family, friends, religion, war
+    * Longer sentences: function words in LDA
+* Younger: jokes, school, fun, problems, relationships, emojis,colloquial words, 
+    * Negemo: hate, bored, stupid 
+
+---
+
+#Notes on Figure 4C - Agreeableness
+
+* Personality: weaker correlations, strongest with pos/neg emotions
+
+
+#### Dictionaries & wordclouds
+
+.pull-left[.center-left[
+* High agreeableness: 
+  * positive emotions
+  * wonderful, great, amazing, awesome..
+  * Weak: 1st person plural (Family, friends), affiliation
+  * free time (evening, weekend, chilled, night)
+]]
+
+.pull-left[
+* Low agreeableness: 
+  * negative emotions
+  * swearwords, hate
+]
+
+---
+
+# Notes Figure 4D - Conscientiousness
+
+* Work, economic concerns, time, social connection
+
+* Topics: High
+    * family, friends
+    * work
+    * structured social time (weekend, spending, day, tomorrow, schedule)
+    * relaxing from work (vacation, recover, rest)
+    
+* Topics: Low
+    * Swearwords
+    * murder, noise, silence, sex, porn, social media
+    
+---
+
+# Notes figure 4E - Extraversion
+
+* Emotion & social dictionaries
+* Topics: 
+  * High: party, love, tonight, fun, high arousal emotions
+  * Low extraversion: computers, technology, Japanese culture, books
+
+---
+
+# Notes Figure 4F - Neuroticism
+
+* negative/positive emotion dictionaries
+
+* Topics: High neuroticism
+  * Somatic concerns (feeling, tired, sick)
+  * Hostility, cursing, exhaustion, stress, frustration
+  
+* Topics: Emotional stability
+  * awesome, amazing, weekend, family/friends, sports, religion
+  
+---
+  
+# Notes Figure 4G - Openess
+
+* High: Cognitive dictionaries, articles <br>
+* Low: Kinship, family, netspeak, positive emotion
+
+* Topics: high openness
+  * politics/philosophy (opinion, moral)
+  * existential: human, nature, universe, wonders
+  * artistic (writing, poetry, story), science, articles
+  
+* Topics: Low openness: 
+  * pragmatic, domestic concerns (home, school, work, dinner, today, weekend, miss, today)
+
+---
+
+# Predictive Power (Table 2)
+
+* Comparison LIWC 2015 - 2007 in supplementary
+
+* Variance explained by models
+
+* Diction < LIWC = GI < LDA
+
+* LDA = Word2Vec = BERT
+
+* All similar amount of variance
+
+* Word embeddings fewer dimensions
+
+
+---
+
+# Impact of sample size (Figure 5)
+
+* User n = 50,500, 1000, 2000, 5000, 15.000, 50.000
+* Words: most recent n =  21, 43, 86, 150, 214, 300, 515, 751, 1008 words across random samples of N = 150, 1,000, 5,000 users
+
+* Figure 5: How many features are significantly correlated with age/gender/personality
+* About 10 LIWC dictionaries, 100 LDA topics, or 200 words and phrases give interesting findings
+* Table 3: larger samples necessary for personality (400-1000) than gender/age (150-250)
+
+---
+
+# Impact of words per person (Figure 6)
+
+* Tradeoff n users vs. n words
+* Age & gender stronger signal = fewer words needed
+  * N = 1000, few hundred words
+  
+* Personality: 
+  * 1000 users - thousands of words
+  * 5000 users: hundreds of words
+  
+---
+  
+# Figure 7: Ambiguous word senses
+
+* Check most frequent words that drive dictionary score
+* Do they match the dictionary meaning?
+* No problems with LIWC 2015
+* 7 problems with LIWC 2007, e.g. honey
+* 8 with DICTION
+
+---
+
+## Impact of number of topics
+
+* 18 sets of topics
+  * 3 topic numbers: 50, 500, 2000 topics
+  * 6 dataset sizes: 50, 500, 5000, 50.000, 500.000, 5 million status updates
+* 18 sets as features in ridge regression
+
+
+#### Table 5: Topics distinguishing contexts of play
+
+* 50 fail to distinguish ball play, musical play, videogame play
+* 500 distinguish them
+
+#### Accuracy for number of topics: Figure 8
+
+* 500 and 2000 clearly better than 50
+* x-axis: n status updates
+
+---
 
 # Conclusions
 
 * Recommendations for best practices: complementary use of both
     * how people think & feel: closed approaches
     * what people think & feel: open approaches
+1. Quick impression with dictionary
+2. topic correlation in more detail
 
+---
+
+
+# Recommendations
+
+* Rule of thumb p 22
+* LIWC 2015 better than 2007
+* DICTION not recommended, LIWC more parsimoniuous than GI
